@@ -1,15 +1,16 @@
 package com.example.retailcorewards.services;
 
 import com.example.retailcorewards.web.model.OrderDto;
-import com.example.retailcorewards.web.model.SkusEnum;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+
 import java.util.UUID;
 
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Override
