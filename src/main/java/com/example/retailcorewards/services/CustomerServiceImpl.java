@@ -46,6 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(customerId.toString());
     }
 
+    /**
+     *
+     * @param customer
+     */
     public void deleteCustomer(CustomerDto customer) {
         customerRepository.delete(customer);
     }
