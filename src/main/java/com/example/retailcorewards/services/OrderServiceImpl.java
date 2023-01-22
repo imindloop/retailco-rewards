@@ -1,33 +1,65 @@
 package com.example.retailcorewards.services;
 
+import com.example.retailcorewards.repositories.OrderRepository;
 import com.example.retailcorewards.web.model.OrderDto;
+import org.hibernate.criterion.Order;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-
-import java.util.UUID;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    @Autowired
+    private OrderRepository orderRepository;
+
+    /**
+     *
+     * @return
+     */
     @Override
-    public OrderDto getOrderById(UUID orderId) {
-        return OrderDto.builder()
-                .id(UUID.randomUUID())
-                .skus(new ArrayList<>(Arrays.asList("JG13", "JG14", "JG12")))
-                .total(new BigDecimal("450.00"))
-                .creationDate(OffsetDateTime.now())
-                .build();
+    public List<OrderDto> getAllOrders(String customerId) {
+        List<OrderDto> orders = new ArrayList<>();
+        orderRepository.findAllByCustomerId(customerId)
+                .forEach(orders::add);
+        return orders;
     }
 
+    /**
+     *
+     * @param orderId
+     * @return
+     */
     @Override
-    public OrderDto saveNewOrder(OrderDto orderDto) {
-        return OrderDto.builder()
-                .id(UUID.randomUUID())
-                .build();
+    public Optional<OrderDto> getOrderById(String orderId) {
+        return orderRepository.findById(orderId.toString());
+    }
+
+    /**
+     *
+     * @param orderDto
+     */
+    public void saveNewOrder(OrderDto orderDto) {
+        orderRepository.save(orderDto);
+    }
+
+    /**
+     *
+     * @param orderDto
+     */
+    public void updateOrder(OrderDto orderDto) {
+        orderRepository.save(orderDto);
+    }
+
+    /**
+     *
+     * @param orderDto
+     */
+    public void deleteOrder(OrderDto orderDto) {
+        orderRepository.delete(orderDto);
     }
 
 }

@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.util.UUID;
@@ -23,9 +24,12 @@ import java.util.UUID;
 public class CustomerDto {
 
     @Id
-    private UUID id;
+    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    private String id;
     private String firstName;
     private String lastName;
+
+    @Column(unique = true)
     private String email;
 
 }
