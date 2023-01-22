@@ -1,23 +1,42 @@
 package com.example.retailcorewards.boostrapdata;
 
 import com.example.retailcorewards.repositories.CustomerRepository;
+import com.example.retailcorewards.repositories.OrderRepository;
 import com.example.retailcorewards.web.model.CustomerDto;
+import com.example.retailcorewards.web.model.OrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
+
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
 
 @Component
-public class CustomerLoader implements CommandLineRunner {
+public class ObjectLoader implements CommandLineRunner {
 
+    @Autowired
     private final CustomerRepository customerRepository;
 
-    public CustomerLoader(CustomerRepository customerRepository) {
+    @Autowired
+    private final OrderRepository orderRepository;
+
+    public ObjectLoader(OrderRepository orderRepository, CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
+        this.orderRepository = orderRepository;
     }
+
+    public CustomerDto ramza = CustomerDto.builder()
+            .id("Ramlve")
+            .firstName("Ramza")
+            .lastName("Beoulve")
+            .email("ramza.beoulve@fftexample.com")
+            .build();
 
     public void run(String... args) throws Exception {
         loadCustomers();
+        loadOrders();
     }
 
     private void loadCustomers() {
@@ -116,4 +135,71 @@ public class CustomerLoader implements CommandLineRunner {
 
         }
     }
+
+    private void loadOrders() {
+
+        if (orderRepository.count() == 0) {
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order1")
+                    .description("Potion x 5, Ether x 1, Antidote x 1, Black Mail Armor x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("120"))
+                    .customer(ramza)
+                    .build());
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order1")
+                    .description("Sabre x 5, X Ether x 1, Key x 1, Cloud Sword x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("80"))
+                    .customer(ramza)
+                    .build());
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order2")
+                    .description("Light Sword x 1, X-Potion x 1, Antidote x 1, Echo Herb x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("75"))
+                    .customer(ramza)
+                    .build());
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order3")
+                    .description("Crystal Shield x 2, Soft x 1, holy  Grail x 1, Elixir x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("200"))
+                    .customer(ramza)
+                    .build());
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order4")
+                    .description("Speed Boots x 1, Mithril Vest x 1, Lamp x 1, Atma Weapon x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("35"))
+                    .customer(ramza)
+                    .build());
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order5")
+                    .description("Ifrit Stone x 5, Shuriken x 40, Shiva Stone x 1, Bahamut Stone x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("400"))
+                    .customer(ramza)
+                    .build());
+
+            orderRepository.save(OrderDto.builder()
+                    .id("order6")
+                    .description("Judas Kiss x 1, Landmine tracker x 1, Morning Star x 1, Sunray Knife x 1")
+                    .creationDate(OffsetDateTime.now())
+                    .total(new BigDecimal("60"))
+                    .customer(ramza)
+                    .build());
+
+            System.out.println("Data boostrapping completed. " + orderRepository.count() + " orders were loaded.");
+
+        }
+    }
+
+
 }

@@ -6,15 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -24,13 +20,14 @@ import java.util.UUID;
 public class OrderDto {
 
     @Id
-    @Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
+    //@Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private String id;
     private BigDecimal total;
+    String description;
 
     @CreationTimestamp
-    @Column(updatable = false)
-    Timestamp creationDate;
+    //@Column(updatable = false)
+    OffsetDateTime creationDate;
 
     @ManyToOne
     CustomerDto customer;
