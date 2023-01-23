@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -42,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
      * @return
      */
     @Override
-    public Optional<CustomerDto> getCustomerById(UUID customerId) {
+    public Optional<CustomerDto> getCustomerById(String customerId) {
         return customerRepository.findById(customerId.toString());
     }
 
