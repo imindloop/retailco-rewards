@@ -70,6 +70,14 @@
 			<version>${jaxb.version}</version>
 		</dependency>
 
+		<!-- Apache Derby -->
+
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
