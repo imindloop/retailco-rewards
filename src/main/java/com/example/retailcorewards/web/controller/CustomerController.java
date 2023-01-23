@@ -30,7 +30,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}")
-    public Optional<CustomerDto> getCustomer(@PathVariable UUID customerId) {
+    public Optional<CustomerDto> getCustomer(@PathVariable String customerId) {
         return customerService.getCustomerById(customerId);
     }
 }
