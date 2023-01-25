@@ -28,33 +28,56 @@ public class RewardsController {
         this.orderService = orderService;
     }
 
-    @GetMapping("/{customerId}")
-    public Map<String, Integer> getRewardPointsByCustomerId(@PathVariable String customerId) {
-        Map<String, Integer> result = new HashMap<>();
-        int totalPoints = 0;
+    @RequestMapping
+    public Map<String, Map<String, Integer>> getRewardPoints() {
 
-        Optional customer = customerService.getCustomerById(customerId);
+        /**
+         * Map with customer name as the key and a map with a month and its corresponding points.
+         */
+        Map<String, Map<String, Integer>> result = new HashMap<>();
 
-        List<OrderDto> orders = orderService.getAllOrders(customerId);
+        List<OrderDto> orders = orderService.getAllOrders("all");
 
         for(OrderDto order : orders) {
 
             int orderTotal = order.getTotal().intValue();
+            String customerFullName = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
+            String orderMonth = order.getCreationDate().getMonth().toString();
 
             if (orderTotal <= 0) {
                 continue;
             } else if (orderTotal > 50 && orderTotal <= 100) {
-                totalPoints += (orderTotal - 50) * 1;
+                if(result.containsKey(customerFullName)) {
+                    Map<String, Integer> map = result.get(customerFullName);
+                    if (map.containsKey(orderMonth)) {
+                        map.replace(orderMonth,
+                                map.get(orderMonth) + (orderTotal - 50));
+                    } else {
+                        map.put(orderMonth, orderTotal - 50);
+                    }
+                } else {
+                    result.put(customerFullName, new HashMap<String, Integer>() {{
+                        put(orderMonth, orderTotal - 50);
+                    }});
+                }
             } else if (orderTotal > 100) {
-                totalPoints += 50;
-                totalPoints += (orderTotal - 100) * 2;
+                if(result.containsKey(customerFullName)) {
+                    Map<String, Integer> map = result.get(customerFullName);
+                    if (map.containsKey(orderMonth)) {
+                        map.replace(orderMonth,
+                                map.get(orderMonth) + 50 + (orderTotal - 100) * 2);
+                    } else {
+                        map.put(orderMonth, orderTotal + 50 + (orderTotal - 100) * 2);
+                    }
+                } else {
+                    result.put(customerFullName, new HashMap<String, Integer>() {{
+                        put(orderMonth, orderTotal + 50 + (orderTotal - 100) * 2);
+                    }});
+                }
             }
         }
 
-        result.put(customerId, totalPoints);
-
         return result;
-
     }
 
 }

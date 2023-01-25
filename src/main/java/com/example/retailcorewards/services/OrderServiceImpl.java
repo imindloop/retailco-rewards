@@ -2,7 +2,6 @@ package com.example.retailcorewards.services;
 
 import com.example.retailcorewards.repositories.OrderRepository;
 import com.example.retailcorewards.web.model.OrderDto;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +22,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAllOrders(String customerId) {
         List<OrderDto> orders = new ArrayList<>();
-        orderRepository.findAllByCustomerId(customerId)
-                .forEach(orders::add);
+
+        if (customerId.equals("all")) {
+            orderRepository.findAll().forEach(orders::add);
+        } else {
+            orderRepository.findAllByCustomerId(customerId)
+                    .forEach(orders::add);
+        }
         return orders;
     }
 
