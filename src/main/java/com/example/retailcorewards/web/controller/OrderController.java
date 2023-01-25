@@ -25,8 +25,7 @@ public class OrderController {
      * @return
      */
     @GetMapping("{customerId}/orders")
-    public List<OrderDto> getAllOrders(@PathVariable String customerId) {
-        System.out.println(customerId);
+    public List<OrderDto> getAllOrdersForACustomer(@PathVariable String customerId) {
         return orderService.getAllOrders(customerId);
     }
 
