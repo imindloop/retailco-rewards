@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public interface OrderService {
 
-    List<OrderDto> getAllOrders(String customerId);
+    List<OrderDto> getAllOrders();
 
     Optional<OrderDto> getOrderById(String orderId);
 

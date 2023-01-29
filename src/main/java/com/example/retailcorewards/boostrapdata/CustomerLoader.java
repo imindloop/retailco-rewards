@@ -3,15 +3,9 @@ package com.example.retailcorewards.boostrapdata;
 import com.example.retailcorewards.repositories.CustomerRepository;
 import com.example.retailcorewards.repositories.OrderRepository;
 import com.example.retailcorewards.web.model.CustomerDto;
-import com.example.retailcorewards.web.model.OrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
-
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.time.OffsetDateTime;
 
 @Component
 public class CustomerLoader implements CommandLineRunner {

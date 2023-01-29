@@ -20,15 +20,12 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public List<OrderDto> getAllOrders(String customerId) {
+    public List<OrderDto> getAllOrders() {
         List<OrderDto> orders = new ArrayList<>();
 
-        if (customerId.equals("all")) {
-            orderRepository.findAll().forEach(orders::add);
-        } else {
-            orderRepository.findAllByCustomerId(customerId)
+        orderRepository.findAll()
                     .forEach(orders::add);
-        }
+
         return orders;
     }
 

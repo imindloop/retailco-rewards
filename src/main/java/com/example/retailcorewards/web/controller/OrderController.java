@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@RequestMapping("/api/v1/customers")
+@RequestMapping("/api/v1/orders")
 @RestController
 public class OrderController {
 
@@ -21,12 +21,11 @@ public class OrderController {
 
     /**
      *
-     * @param customerId
      * @return
      */
-    @GetMapping("{customerId}/orders")
-    public List<OrderDto> getAllOrdersForACustomer(@PathVariable String customerId) {
-        return orderService.getAllOrders(customerId);
+    @RequestMapping
+    public List<OrderDto> getAllOrders() {
+        return orderService.getAllOrders();
     }
 
     /**
@@ -35,7 +34,7 @@ public class OrderController {
      * @param orderId
      * @return
      */
-    @GetMapping("/{customerId}/orders/{orderId}")
+    @GetMapping("/{customerId}/{orderId}")
     public Optional<OrderDto> getOrderbyId(@PathVariable String customerId, @PathVariable String orderId) {
         return orderService.getOrderById(orderId);
     }

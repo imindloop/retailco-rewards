@@ -38,7 +38,7 @@ public class RewardsServiceImpl implements RewardsService {
          * Map with customer name as the key and a map with a month and its corresponding points.
          */
         Map<String, Map<String, Integer>> result = new HashMap<>();
-        List<OrderDto> orders = orderService.getAllOrders("all");
+        List<OrderDto> orders = orderService.getAllOrders();
 
         for(OrderDto order : orders) {
             ORDER_TOTAL = order.getTotal().intValue();
