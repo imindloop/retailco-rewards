@@ -24,7 +24,6 @@ public class RewardsServiceImpl implements RewardsService {
     @Value("${rewards.pointsforhighestrewardsthreshold}")
     private int rewardPointsForUpperThreshold = 2;
 
-    @Autowired
     private OrderService orderService;
 
     int ORDER_TOTAL;
@@ -34,22 +33,9 @@ public class RewardsServiceImpl implements RewardsService {
     @Override
     public Map<String, Map<String, Integer>> getRewardPoints(List<OrderDto> orders) throws Exception {
 
-        if (lowerRewardsThreshold <= 0) {
-            throw new Exception("Invalid value for lower rewards threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
+        if (lowerRewardsThreshold <= 0 || upperRewardsThreshold <= 0 || rewardPointsForLowerThreshold <= 0 || rewardPointsForUpperThreshold <= 0) {
+            throw new Exception("Invalid configuration value for rewards points calculation, negative values are not accepted.");
         }
-
-        if (upperRewardsThreshold <= 0) {
-            throw new Exception("Invalid value for upper rewards threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
-        }
-
-        if (rewardPointsForLowerThreshold <= 0) {
-            throw new Exception("Invalid value for points per dollar in lower threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
-        }
-
-        if (rewardPointsForUpperThreshold <= 0) {
-            throw new Exception("Invalid value for points per dollar in upper threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
-        }
-
         Map<String, Map<String, Integer>> result = new HashMap<>();
 
         if (null != orders && !orders.isEmpty()) {
@@ -58,7 +44,7 @@ public class RewardsServiceImpl implements RewardsService {
                 CUSTOMER_FULL_NAME = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
                 MONTH_OF_ORDER = order.getCreationDate().getMonth().toString();
 
-                if (ORDER_TOTAL > lowerRewardsThreshold && ORDER_TOTAL <= upperRewardsThreshold) {
+                if (ORDER_TOTAL >= lowerRewardsThreshold && ORDER_TOTAL < upperRewardsThreshold) {
                     if (result.containsKey(CUSTOMER_FULL_NAME)) {
                         Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
                         if (map.containsKey(MONTH_OF_ORDER)) {
@@ -72,7 +58,7 @@ public class RewardsServiceImpl implements RewardsService {
                             put(MONTH_OF_ORDER, calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
                         }});
                     }
-                } else if (ORDER_TOTAL > upperRewardsThreshold) {
+                } else if (ORDER_TOTAL >= upperRewardsThreshold) {
                     if (result.containsKey(CUSTOMER_FULL_NAME)) {
                         Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
                         if (map.containsKey(MONTH_OF_ORDER)) {
@@ -98,7 +84,6 @@ public class RewardsServiceImpl implements RewardsService {
         if (orderTotal >= lowerRewardsThreshold) {
             result =  (orderTotal - lowerRewardsThreshold) * rewardPointsForLowerThreshold;
         }
-
         return result;
     }
 
