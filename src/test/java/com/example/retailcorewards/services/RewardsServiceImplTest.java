@@ -81,28 +81,151 @@ class RewardsServiceImplTest {
     }
 
     private static Object[] testValues() {
+
+        CustomerDto ramza = CustomerDto.builder()
+            .id("Ramlve")
+            .firstName("Ramza")
+            .lastName("Beoulve")
+            .email("ramza.beoulve@fftexample.com")
+            .build();
+
+        CustomerDto delita = CustomerDto.builder()
+            .id("Delral")
+            .firstName("Delita")
+            .lastName("Heiral")
+            .email("delita.heiral@fftexample.com")
+            .build();
+
+        LocalDate localDate1 = LocalDate.parse("2022-12-03");
+        LocalDate localDate2 = LocalDate.parse("2022-11-03");
+        LocalDate localDate3 = LocalDate.parse("2022-10-03");
+
         return new Object[] {
             new Object[]{
-                new ArrayList<OrderDto>() {
-                    {
-                        add(OrderDto.builder()
-                                .id("order1")
-                                .description("Razor x 5, Brush x 1, Labrador x 1, Black Mail Armor x 1")
-                                .creationDate(LocalDate.parse("2022-12-03"))
-                                .total(new BigDecimal("70"))
-                                .customer(CustomerDto.builder()
-                                        .id("Ramlve")
-                                        .firstName("Ramza")
-                                        .lastName("Beoulve")
-                                        .email("ramza.beoulve@fftexample.com")
-                                        .build())
-                                .build()
-                        );
-                    }
-                },
+                new ArrayList<OrderDto>() {{
+
+                    // Ramza Orders
+
+                    add(OrderDto.builder()
+                        .id("order1")
+                        .description("Razor x 5, Brush x 1, Labrador x 1, Black Mail Armor x 1")
+                        .creationDate(LocalDate.parse("2022-12-03"))
+                        .total(new BigDecimal("70"))
+                        .customer(ramza)
+                        .build()
+                    );
+                    add(OrderDto.builder()
+                        .id("order2")
+                        .description("Sabre x 5, X Ether x 1, Key x 1, Cloud Sword x 1")
+                        .creationDate(localDate2)
+                        .total(new BigDecimal("80"))
+                        .customer(ramza)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order3")
+                        .description("Light Sword x 1, X-Potion x 1, Antidote x 1, Echo Herb x 1")
+                        .creationDate(localDate3)
+                        .total(new BigDecimal("55"))
+                        .customer(ramza)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order4")
+                        .description("Crystal Shield x 2, Soft x 1, holy  Grail x 1, Elixir x 1")
+                        .creationDate(localDate1)
+                        .total(new BigDecimal("50"))
+                        .customer(ramza)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order5")
+                        .description("Speed Boots x 1, Mithril Vest x 1, Lamp x 1, Atma Weapon x 1")
+                        .creationDate(localDate2)
+                        .total(new BigDecimal("100"))
+                        .customer(ramza)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order6")
+                        .description("Ifrit Stone x 5, Shuriken x 40, Shiva Stone x 1, Bahamut Stone x 1")
+                        .creationDate(localDate3)
+                        .total(new BigDecimal("200"))
+                        .customer(ramza)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order7")
+                        .description("Judas Kiss x 1, Landmine tracker x 1, Morning Star x 1, Sunray Knife x 1")
+                        .creationDate(localDate1)
+                        .total(new BigDecimal("65"))
+                        .customer(ramza)
+                        .build()
+                    );
+
+                    // Delita Orders
+
+                    add(OrderDto.builder()
+                        .id("order8")
+                        .description("Potion x 5, Ether x 1, Antidote x 1, Black Mail Armor x 1")
+                        .creationDate(localDate1)
+                        .total(new BigDecimal("200"))
+                        .customer(delita)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order9")
+                        .description("Sabre x 5, X Ether x 1, Key x 1, Cloud Sword x 1")
+                        .creationDate(localDate2)
+                        .total(new BigDecimal("1500"))
+                        .customer(delita)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order10")
+                        .description("Light Sword x 1, X-Potion x 1, Antidote x 1, Echo Herb x 1")
+                        .creationDate(localDate3)
+                        .total(new BigDecimal("87"))
+                        .customer(delita)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                        .id("order11")
+                        .description("Crystal Shield x 2, Soft x 1, holy  Grail x 1, Elixir x 1")
+                        .creationDate(localDate1)
+                        .total(new BigDecimal("92"))
+                        .customer(delita)
+                        .build()
+                    );
+
+                    add(OrderDto.builder()
+                            .id("order13")
+                            .description("Ifrit Stone x 5, Shuriken x 40, Shiva Stone x 1, Bahamut Stone x 1")
+                            .creationDate(localDate3)
+                            .total(new BigDecimal("320"))
+                            .customer(delita)
+                            .build()
+                    );
+                }},
+
                 new HashMap<String, Map<String, Integer>>() {{
+                    put("Delita Heiral", new HashMap<String, Integer>(){{
+                        put("DECEMBER", 142);
+                        put("NOVEMBER", 1400);
+                        put("OCTOBER", 257);
+                    }});
                     put("Ramza Beoulve", new HashMap<String, Integer>(){{
-                        put("DECEMBER", 20);
+                        put("DECEMBER", 35);
+                        put("NOVEMBER", 30);
+                        put("OCTOBER", 105);
                     }});
                 }}
             }
