@@ -13,101 +13,96 @@ import java.util.Map;
 public class RewardsServiceImpl implements RewardsService {
 
     @Value("${rewards.lowestrewardsthreshold}")
-    private int LOWER_REWARDS_THRESHOLD;
+    private int lowerRewardsThreshold = 50;
 
     @Value("${rewards.highestrewardsthreshold}")
-    private int UPPER_REWARDS_THRESHOLD;
+    private int upperRewardsThreshold = 100;
 
     @Value("${rewards.pointsforlowestrewardsthreshold}")
-    private int POINTS_PER_DOLLAR_IN_LOWER_THRESHOLD;
+    private int rewardPointsForLowerThreshold = 1;
 
     @Value("${rewards.pointsforhighestrewardsthreshold}")
-    private int POINTS_PER_DOLLAR_IN_UPPER_THRESHOLD;
-
-    private int ORDER_TOTAL;
-    private String CUSTOMER_FULL_NAME;
-    private String MONTH_OF_ORDER;
+    private int rewardPointsForUpperThreshold = 2;
 
     @Autowired
     private OrderService orderService;
 
+    int ORDER_TOTAL;
+    String CUSTOMER_FULL_NAME;
+    String MONTH_OF_ORDER;
+
     @Override
-    public Map<String, Map<String, Integer>> getRewardPoints() {
+    public Map<String, Map<String, Integer>> getRewardPoints(List<OrderDto> orders) throws Exception {
 
-        /**
-         * Map with customer name as the key and a map with a month and its corresponding points.
-         */
+        if (lowerRewardsThreshold <= 0) {
+            throw new Exception("Invalid value for lower rewards threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
+        }
+
+        if (upperRewardsThreshold <= 0) {
+            throw new Exception("Invalid value for upper rewards threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
+        }
+
+        if (rewardPointsForLowerThreshold <= 0) {
+            throw new Exception("Invalid value for points per dollar in lower threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
+        }
+
+        if (rewardPointsForUpperThreshold <= 0) {
+            throw new Exception("Invalid value for points per dollar in upper threshold, it shouldn't be lesser than 0, please input a valid value in application.properties");
+        }
+
         Map<String, Map<String, Integer>> result = new HashMap<>();
-        List<OrderDto> orders = orderService.getAllOrders("all");
 
-        for(OrderDto order : orders) {
-            ORDER_TOTAL = order.getTotal().intValue();
-            CUSTOMER_FULL_NAME = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
-            MONTH_OF_ORDER = order.getCreationDate().getMonth().toString();
+        if (null != orders && !orders.isEmpty()) {
+            for (OrderDto order : orders) {
+                ORDER_TOTAL = order.getTotal().intValue();
+                CUSTOMER_FULL_NAME = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
+                MONTH_OF_ORDER = order.getCreationDate().getMonth().toString();
 
-
-            if (ORDER_TOTAL > LOWER_REWARDS_THRESHOLD && ORDER_TOTAL <= UPPER_REWARDS_THRESHOLD) {
-                if(result.containsKey(CUSTOMER_FULL_NAME)) {
-                    updateCustomerInLowerThreshold(result);
-                } else {
-                    addCustomerInLowerThreshold(result);
-                }
-            } else if (ORDER_TOTAL > UPPER_REWARDS_THRESHOLD) {
-                if(result.containsKey(CUSTOMER_FULL_NAME)) {
-                    updateCustomerInUpperThreshold(result);
-                } else {
-                    addCustomerInUpperThreshold(result);
+                if (ORDER_TOTAL > lowerRewardsThreshold && ORDER_TOTAL <= upperRewardsThreshold) {
+                    if (result.containsKey(CUSTOMER_FULL_NAME)) {
+                        Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
+                        if (map.containsKey(MONTH_OF_ORDER)) {
+                            map.replace(MONTH_OF_ORDER,
+                                    map.get(MONTH_OF_ORDER) + calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
+                        } else {
+                            map.put(MONTH_OF_ORDER, calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
+                        }
+                    } else {
+                        result.put(CUSTOMER_FULL_NAME, new HashMap<String, Integer>() {{
+                            put(MONTH_OF_ORDER, calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
+                        }});
+                    }
+                } else if (ORDER_TOTAL > upperRewardsThreshold) {
+                    if (result.containsKey(CUSTOMER_FULL_NAME)) {
+                        Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
+                        if (map.containsKey(MONTH_OF_ORDER)) {
+                            map.replace(MONTH_OF_ORDER,
+                                    map.get(MONTH_OF_ORDER) + calculatePointsInUpperThreshold(lowerRewardsThreshold, ORDER_TOTAL, upperRewardsThreshold, rewardPointsForUpperThreshold));
+                        } else {
+                            map.put(MONTH_OF_ORDER, calculatePointsInUpperThreshold(lowerRewardsThreshold , ORDER_TOTAL, upperRewardsThreshold, rewardPointsForUpperThreshold));
+                        }
+                    } else {
+                        result.put(CUSTOMER_FULL_NAME, new HashMap<String, Integer>() {{
+                            put(MONTH_OF_ORDER, calculatePointsInUpperThreshold(lowerRewardsThreshold , ORDER_TOTAL, upperRewardsThreshold, rewardPointsForUpperThreshold));
+                        }});
+                    }
                 }
             }
         }
         return result;
     }
 
-    private void updateCustomerInUpperThreshold(Map<String, Map<String, Integer>> result) {
-        Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
-        if (map.containsKey(MONTH_OF_ORDER)) {
-            updateMonthPointsInHigherThreshold(map);
-        } else {
-            addMonthPointsInUpperThreshold(map);
+    public Integer calculatePointsInLowerThreshold(int orderTotal, int lowerRewardsThreshold, int rewardPointsForLowerThreshold) {
+        Integer result = 0;
+
+        if (orderTotal >= lowerRewardsThreshold) {
+            result =  (orderTotal - lowerRewardsThreshold) * rewardPointsForLowerThreshold;
         }
+
+        return result;
     }
 
-    private void updateCustomerInLowerThreshold(Map<String, Map<String, Integer>> result) {
-        Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
-        if (map.containsKey(MONTH_OF_ORDER)) {
-            updateMonthPointsInLowerThreshold(map);
-        } else {
-            addMonthPointsToLowerThreshold(map);
-        }
-    }
-
-    private void addMonthPointsInUpperThreshold(Map<String, Integer> map) {
-        map.put(MONTH_OF_ORDER, ORDER_TOTAL + LOWER_REWARDS_THRESHOLD + (ORDER_TOTAL - UPPER_REWARDS_THRESHOLD) * POINTS_PER_DOLLAR_IN_UPPER_THRESHOLD);
-    }
-
-    private void addMonthPointsToLowerThreshold(Map<String, Integer> map) {
-        map.put(MONTH_OF_ORDER, ORDER_TOTAL - LOWER_REWARDS_THRESHOLD);
-    }
-
-    private void addCustomerInUpperThreshold(Map<String, Map<String, Integer>> result) {
-        result.put(CUSTOMER_FULL_NAME, new HashMap<String, Integer>() {{
-            put(MONTH_OF_ORDER, ORDER_TOTAL + LOWER_REWARDS_THRESHOLD + (ORDER_TOTAL - UPPER_REWARDS_THRESHOLD) * POINTS_PER_DOLLAR_IN_UPPER_THRESHOLD);
-        }});
-    }
-
-    private void addCustomerInLowerThreshold(Map<String, Map<String, Integer>> result) {
-        result.put(CUSTOMER_FULL_NAME, new HashMap<String, Integer>() {{
-            put(MONTH_OF_ORDER, ORDER_TOTAL - LOWER_REWARDS_THRESHOLD);
-        }});
-    }
-
-    private void updateMonthPointsInHigherThreshold(Map<String, Integer> map) {
-        map.replace(MONTH_OF_ORDER,
-                map.get(MONTH_OF_ORDER) + LOWER_REWARDS_THRESHOLD + (ORDER_TOTAL - UPPER_REWARDS_THRESHOLD) * POINTS_PER_DOLLAR_IN_UPPER_THRESHOLD);
-    }
-
-    private void updateMonthPointsInLowerThreshold(Map<String, Integer> map) {
-        map.replace(MONTH_OF_ORDER,
-                map.get(MONTH_OF_ORDER) + (ORDER_TOTAL - LOWER_REWARDS_THRESHOLD) * POINTS_PER_DOLLAR_IN_LOWER_THRESHOLD);
+    public Integer calculatePointsInUpperThreshold(int orderTotal, int lowerRewardsThreshold, int upperRewardsThreshold, int rewardPointsForUpperThreshold) {
+        return lowerRewardsThreshold + (orderTotal - upperRewardsThreshold) * rewardPointsForUpperThreshold;
     }
 }

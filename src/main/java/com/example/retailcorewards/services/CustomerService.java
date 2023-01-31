@@ -12,8 +12,6 @@ public interface CustomerService {
 
     List<CustomerDto> getAllCustomers();
 
-    Optional<CustomerDto> getCustomerById(String customerId);
-
     void addCustomer(CustomerDto customer);
 
     void deleteCustomer(CustomerDto customer);

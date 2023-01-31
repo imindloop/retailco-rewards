@@ -20,7 +20,6 @@ import java.time.LocalDate;
 public class OrderDto {
 
     @Id
-    //@Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private String id;
     private BigDecimal total;
     String description;
