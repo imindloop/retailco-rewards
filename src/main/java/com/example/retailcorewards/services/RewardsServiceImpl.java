@@ -1,8 +1,6 @@
 package com.example.retailcorewards.services;
 
 import com.example.retailcorewards.web.model.OrderDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -12,23 +10,18 @@ import java.util.Map;
 @Service
 public class RewardsServiceImpl implements RewardsService {
 
-    @Value("${rewards.lowestrewardsthreshold}")
     private int lowerRewardsThreshold = 50;
 
-    @Value("${rewards.highestrewardsthreshold}")
     private int upperRewardsThreshold = 100;
 
-    @Value("${rewards.pointsforlowestrewardsthreshold}")
     private int rewardPointsForLowerThreshold = 1;
 
-    @Value("${rewards.pointsforhighestrewardsthreshold}")
     private int rewardPointsForUpperThreshold = 2;
 
-    private OrderService orderService;
+    int orderTotal;
+    String customerFullName;
+    String monthOfOrder;
 
-    int ORDER_TOTAL;
-    String CUSTOMER_FULL_NAME;
-    String MONTH_OF_ORDER;
 
     @Override
     public Map<String, Map<String, Integer>> getRewardPoints(List<OrderDto> orders) throws Exception {
@@ -40,36 +33,36 @@ public class RewardsServiceImpl implements RewardsService {
 
         if (null != orders && !orders.isEmpty()) {
             for (OrderDto order : orders) {
-                ORDER_TOTAL = order.getTotal().intValue();
-                CUSTOMER_FULL_NAME = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
-                MONTH_OF_ORDER = order.getCreationDate().getMonth().toString();
+                orderTotal = order.getTotal().intValue();
+                customerFullName = order.getCustomer().getFirstName() + " " + order.getCustomer().getLastName();
+                monthOfOrder = order.getCreationDate().getMonth().toString();
 
-                if (ORDER_TOTAL >= lowerRewardsThreshold && ORDER_TOTAL < upperRewardsThreshold) {
-                    if (result.containsKey(CUSTOMER_FULL_NAME)) {
-                        Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
-                        if (map.containsKey(MONTH_OF_ORDER)) {
-                            map.replace(MONTH_OF_ORDER,
-                                    map.get(MONTH_OF_ORDER) + calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
+                if (orderTotal >= lowerRewardsThreshold && orderTotal < upperRewardsThreshold) {
+                    if (result.containsKey(customerFullName)) {
+                        Map<String, Integer> map = result.get(customerFullName);
+                        if (map.containsKey(monthOfOrder)) {
+                            map.replace(monthOfOrder,
+                                    map.get(monthOfOrder) + calculatePointsInLowerThreshold(orderTotal, lowerRewardsThreshold, rewardPointsForLowerThreshold));
                         } else {
-                            map.put(MONTH_OF_ORDER, calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
+                            map.put(monthOfOrder, calculatePointsInLowerThreshold(orderTotal, lowerRewardsThreshold, rewardPointsForLowerThreshold));
                         }
                     } else {
-                        result.put(CUSTOMER_FULL_NAME, new HashMap<String, Integer>() {{
-                            put(MONTH_OF_ORDER, calculatePointsInLowerThreshold(ORDER_TOTAL, lowerRewardsThreshold, rewardPointsForLowerThreshold));
+                        result.put(customerFullName, new HashMap<String, Integer>() {{
+                            put(monthOfOrder, calculatePointsInLowerThreshold(orderTotal, lowerRewardsThreshold, rewardPointsForLowerThreshold));
                         }});
                     }
-                } else if (ORDER_TOTAL >= upperRewardsThreshold) {
-                    if (result.containsKey(CUSTOMER_FULL_NAME)) {
-                        Map<String, Integer> map = result.get(CUSTOMER_FULL_NAME);
-                        if (map.containsKey(MONTH_OF_ORDER)) {
-                            map.replace(MONTH_OF_ORDER,
-                                    map.get(MONTH_OF_ORDER) + calculatePointsInUpperThreshold(lowerRewardsThreshold, ORDER_TOTAL, upperRewardsThreshold, rewardPointsForUpperThreshold));
+                } else if (orderTotal >= upperRewardsThreshold) {
+                    if (result.containsKey(customerFullName)) {
+                        Map<String, Integer> map = result.get(customerFullName);
+                        if (map.containsKey(monthOfOrder)) {
+                            map.replace(monthOfOrder,
+                                    map.get(monthOfOrder) + calculatePointsInUpperThreshold(lowerRewardsThreshold, orderTotal, upperRewardsThreshold, rewardPointsForUpperThreshold));
                         } else {
-                            map.put(MONTH_OF_ORDER, calculatePointsInUpperThreshold(lowerRewardsThreshold , ORDER_TOTAL, upperRewardsThreshold, rewardPointsForUpperThreshold));
+                            map.put(monthOfOrder, calculatePointsInUpperThreshold(lowerRewardsThreshold , orderTotal, upperRewardsThreshold, rewardPointsForUpperThreshold));
                         }
                     } else {
-                        result.put(CUSTOMER_FULL_NAME, new HashMap<String, Integer>() {{
-                            put(MONTH_OF_ORDER, calculatePointsInUpperThreshold(lowerRewardsThreshold , ORDER_TOTAL, upperRewardsThreshold, rewardPointsForUpperThreshold));
+                        result.put(customerFullName, new HashMap<String, Integer>() {{
+                            put(monthOfOrder, calculatePointsInUpperThreshold(lowerRewardsThreshold , orderTotal, upperRewardsThreshold, rewardPointsForUpperThreshold));
                         }});
                     }
                 }
