@@ -4,10 +4,7 @@ import com.example.retailcorewards.services.CustomerService;
 import com.example.retailcorewards.web.model.CustomerDto;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequestMapping("/api/v1/customers")
 @RestController
@@ -29,8 +26,4 @@ public class CustomerController {
         customerService.addCustomer(customer);
     }
 
-    @GetMapping("/{customerId}")
-    public Optional<CustomerDto> getCustomer(@PathVariable String customerId) {
-        return customerService.getCustomerById(customerId);
-    }
 }

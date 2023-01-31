@@ -4,18 +4,13 @@ import com.example.retailcorewards.web.model.OrderDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface OrderService {
 
     List<OrderDto> getAllOrders();
 
-    Optional<OrderDto> getOrderById(String orderId);
-
-    void saveNewOrder(OrderDto order);
-
-    void updateOrder(OrderDto order);
+    void addOrder(OrderDto order);
 
     void deleteOrder(OrderDto orderId);
 

@@ -6,8 +6,6 @@ import com.example.retailcorewards.web.model.OrderDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RequestMapping("/api/v1/orders")
 @RestController
@@ -30,33 +28,12 @@ public class OrderController {
 
     /**
      *
-     * @param customerId
-     * @param orderId
-     * @return
-     */
-    @GetMapping("/{customerId}/{orderId}")
-    public Optional<OrderDto> getOrderbyId(@PathVariable String customerId, @PathVariable String orderId) {
-        return orderService.getOrderById(orderId);
-    }
-
-    /**
-     *
      * @param orderDto
      */
     @PostMapping("/{customerId}/orders")
     public void createNewOrder(@PathVariable String customerId, @RequestBody OrderDto orderDto) {
         orderDto.setCustomer(new CustomerDto(customerId, "", "", ""));
-        orderService.saveNewOrder(orderDto);
-    }
-
-    /**
-     *
-     * @param orderDto
-     */
-    @PutMapping("/{customerId}/orders/{orderId}")
-    public void updateOrder(@RequestBody OrderDto orderDto, @PathVariable String customerId, @PathVariable String orderId) {
-        orderDto.setCustomer(new CustomerDto(customerId, "", "", ""));
-        orderService.updateOrder(orderDto);
+        orderService.addOrder(orderDto);
     }
 
     /**
