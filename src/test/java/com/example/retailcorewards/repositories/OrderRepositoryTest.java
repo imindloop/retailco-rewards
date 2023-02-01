@@ -29,7 +29,7 @@ class OrderRepositoryTest {
     }
 
     CustomerDto ramza = CustomerDto.builder()
-            .id("Ramlve")
+            .id("ramlve")
             .firstName("Ramza")
             .lastName("Beoulve")
             .email("ramza.beoulve@fftexample.com")

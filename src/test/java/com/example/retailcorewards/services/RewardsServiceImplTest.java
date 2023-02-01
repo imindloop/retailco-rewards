@@ -114,6 +114,7 @@ class RewardsServiceImplTest {
                         .customer(ramza)
                         .build()
                     );
+
                     add(OrderDto.builder()
                         .id("order2")
                         .description("Sabre x 5, X Ether x 1, Key x 1, Cloud Sword x 1")

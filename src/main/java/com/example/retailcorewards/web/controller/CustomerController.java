@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("/api/v1/customers")
 @RestController
+@RequestMapping("/api/v1/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -21,7 +21,7 @@ public class CustomerController {
         return customerService.getAllCustomers();
     }
 
-    @PostMapping()
+    @PostMapping
     public void addCustomer(@RequestBody CustomerDto customer) {
         customerService.addCustomer(customer);
     }
