@@ -22,7 +22,7 @@ public class OrderController {
      * @return
      */
     @RequestMapping
-    public List<OrderDto> getAllOrders() {
+    public List<OrderDto> getOrders() {
         return orderService.getAllOrders();
     }
 
@@ -30,19 +30,9 @@ public class OrderController {
      *
      * @param orderDto
      */
-    @PostMapping("/{customerId}/orders")
-    public void createNewOrder(@PathVariable String customerId, @RequestBody OrderDto orderDto) {
-        orderDto.setCustomer(new CustomerDto(customerId, "", "", ""));
+    @PostMapping
+    public void createNewOrder(@RequestBody OrderDto orderDto) {
         orderService.addOrder(orderDto);
-    }
-
-    /**
-     *
-     * @param orderDto
-     */
-    @DeleteMapping("/{customerId}/orders/{orderId}")
-    public void deleteOrder(@RequestBody OrderDto orderDto) {
-        orderService.deleteOrder(orderDto);
     }
 
 }

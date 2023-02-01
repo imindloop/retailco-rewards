@@ -31,7 +31,7 @@ public class CustomerLoader implements CommandLineRunner {
             // Creating Ramza
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Ramlve")
+                    .id("ramlve")
                     .firstName("Ramza")
                     .lastName("Beoulve")
                     .email("ramza.beoulve@fftexample.com")
@@ -40,14 +40,14 @@ public class CustomerLoader implements CommandLineRunner {
             // Creating Delita
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Delral")
+                    .id("delral")
                     .firstName("Delita")
                     .lastName("Heiral")
                     .email("delita.heiral@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Musnsa")
+                    .id("musnsa")
                     .firstName("Mustadio")
                     .lastName("Bunansa")
                     .email("mustadio.bunansa@fftexample.com")
@@ -61,56 +61,56 @@ public class CustomerLoader implements CommandLineRunner {
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Rapena")
+                    .id("rapena")
                     .firstName("Rapha")
                     .lastName("Galthena")
                     .email("rapha.galthena@fftexample.com\n")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Marena")
+                    .id("marena")
                     .firstName("Marach")
                     .lastName("Galthena")
                     .email("marach.galthena@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Ciddeu")
+                    .id("ciddeu")
                     .firstName("Cidolfus")
                     .lastName("Orlandeu")
                     .email("cidolfus.orlandeu@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Mellle")
+                    .id("mellle")
                     .firstName("Meliadoul")
                     .lastName("Tengille")
                     .email("meliadoul.tengille@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Beomus")
+                    .id("beomus")
                     .firstName("Beowulf")
                     .lastName("Cadmus")
                     .email("beowulf.cadmus@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Reilar")
+                    .id("reilar")
                     .firstName("Reis")
                     .lastName("Duelar")
                     .email("reis.duelar@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Almlve")
+                    .id("almlve")
                     .firstName("Alma")
                     .lastName("Beoulve")
                     .email("alma.beoulve@fftexample.com")
                     .build());
 
             customerRepository.save(CustomerDto.builder()
-                    .id("Dyclve")
+                    .id("dyclve")
                     .firstName("Dycedarg")
                     .lastName("Beoulve")
                     .email("dycedarg.beoulve@fftexample.com")

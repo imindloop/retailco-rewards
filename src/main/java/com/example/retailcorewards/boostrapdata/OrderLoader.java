@@ -13,21 +13,21 @@ import java.time.LocalDate;
 public class OrderLoader implements CommandLineRunner {
 
     private CustomerDto ramza = CustomerDto.builder()
-            .id("Ramlve")
+            .id("ramlve")
             .firstName("Ramza")
             .lastName("Beoulve")
             .email("ramza.beoulve@fftexample.com")
             .build();
 
     private CustomerDto delita = CustomerDto.builder()
-            .id("Delral")
+            .id("delral")
             .firstName("Delita")
             .lastName("Heiral")
             .email("delita.heiral@fftexample.com")
             .build();
 
     private CustomerDto mustadio = CustomerDto.builder()
-            .id("Musnsa")
+            .id("musnsa")
             .firstName("Mustadio")
             .lastName("Bunansa")
             .email("mustadio.bunansa@fftexample.com")

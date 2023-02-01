@@ -5,15 +5,15 @@ import com.example.retailcorewards.services.RewardsService;
 import com.example.retailcorewards.web.model.OrderDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
 
-
-@RequestMapping("/api/v1/rewards")
 @RestController
+@RequestMapping("/api/v1/rewards")
 public class RewardsController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class RewardsController {
     @Autowired
     private RewardsService rewardsService;
 
-    @RequestMapping
+    @GetMapping
     public Map<String, Map<String, Integer>> getRewardPoints() throws Exception {
         List<OrderDto> orders = orderService.getAllOrders();
         return rewardsService.getRewardPoints(orders);
