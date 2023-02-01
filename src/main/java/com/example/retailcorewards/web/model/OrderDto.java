@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -20,14 +20,12 @@ import java.time.OffsetDateTime;
 public class OrderDto {
 
     @Id
-    //@Column(length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private String id;
     private BigDecimal total;
     String description;
 
-    @CreationTimestamp
     //@Column(updatable = false)
-    OffsetDateTime creationDate;
+    LocalDate creationDate;
 
     @ManyToOne
     CustomerDto customer;

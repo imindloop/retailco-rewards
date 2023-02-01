@@ -24,7 +24,6 @@ import java.util.UUID;
 public class CustomerDto {
 
     @Id
-    //@Column(name = "customerId", length = 36, columnDefinition = "varchar", updatable = false, nullable = false)
     private String id;
     private String firstName;
     private String lastName;

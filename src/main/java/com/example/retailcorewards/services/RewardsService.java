@@ -4,14 +4,9 @@ import com.example.retailcorewards.web.model.OrderDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
-public interface OrderService {
-
-    List<OrderDto> getAllOrders();
-
-    void addOrder(OrderDto order);
-
-    void deleteOrder(OrderDto orderId);
-
+public interface RewardsService {
+    Map<String, Map<String, Integer>> getRewardPoints(List<OrderDto> orders) throws Exception;
 }
